@@ -1,0 +1,889 @@
+/* === Reset & Base === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg-dark: #1a1a2e;
+    --bg-mid: #16213e;
+    --bg-card: #0f3460;
+    --accent: #e94560;
+    --accent-glow: #ff6b81;
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+    --green: #2ecc71;
+    --green-dark: #27ae60;
+    --text: #eee;
+    --text-dim: #aaa;
+    --track-brown: #8B6914;
+    --track-light: #C4A44A;
+    --grass: #2d5a1e;
+    --rail: #fff;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+#app {
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* === Screens === */
+.screen { display: none; padding: 20px; }
+.screen.active { display: block; }
+
+/* === Title Screen === */
+#screen-title {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 50%, var(--grass) 100%);
+}
+#screen-title.active { display: flex; }
+
+.title-banner h1 {
+    font-size: 3.5rem;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(255,215,0,0.3), 2px 2px 0 #333;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+}
+
+.title-banner .subtitle {
+    font-size: 1.4rem;
+    color: var(--text-dim);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+}
+
+.title-menu {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.title-menu button {
+    padding: 16px 60px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 2px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    cursor: pointer;
+    letter-spacing: 3px;
+    transition: all 0.3s;
+}
+
+.title-menu button:hover {
+    background: var(--gold);
+    color: var(--bg-dark);
+}
+
+.title-footer {
+    margin-top: 80px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+}
+
+/* === HUD === */
+.hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--bg-mid);
+    border-bottom: 2px solid var(--accent);
+    margin: -20px -20px 20px -20px;
+}
+
+.hud-left { display: flex; gap: 20px; align-items: center; }
+.owner-name { font-weight: bold; font-size: 1.1rem; }
+.stable-name { color: var(--text-dim); font-style: italic; }
+.hud-right { display: flex; gap: 20px; align-items: center; }
+.money {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--green);
+}
+.day { color: var(--gold); font-weight: bold; }
+
+/* === Tabs === */
+.tab-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--bg-card);
+    padding-bottom: 0;
+}
+
+.tab {
+    padding: 10px 24px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.tab-content h2 {
+    margin-bottom: 16px;
+    color: var(--gold);
+    font-size: 1.5rem;
+}
+
+/* === Horse Cards === */
+.horse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.horse-card {
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 16px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    cursor: default;
+    position: relative;
+}
+
+.horse-card:hover { border-color: var(--accent); }
+.horse-card.selected { border-color: var(--gold); box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+
+.horse-card .horse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.horse-card .horse-name {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.horse-card .horse-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.horse-card .horse-breed {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+}
+
+.horse-card .stat-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-label {
+    width: 85px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-bar {
+    flex: 1;
+    height: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+.stat-fill.speed { background: linear-gradient(90deg, #e74c3c, #e94560); }
+.stat-fill.stamina { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+.stat-fill.accel { background: linear-gradient(90deg, #3498db, #2980b9); }
+.stat-fill.luck { background: linear-gradient(90deg, #f39c12, #e67e22); }
+
+.stat-value {
+    width: 28px;
+    text-align: right;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.horse-card .horse-meta {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.horse-card .horse-energy {
+    margin-top: 8px;
+}
+
+.energy-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.energy-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71);
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.horse-card .price {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--green);
+}
+
+.horse-card .btn-buy,
+.horse-card .btn-sell {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-buy {
+    background: var(--green);
+    color: #fff;
+}
+.btn-buy:hover { background: var(--green-dark); }
+.btn-buy:disabled { background: #555; cursor: not-allowed; }
+
+.btn-sell {
+    background: var(--accent);
+    color: #fff;
+}
+.btn-sell:hover { background: var(--accent-glow); }
+
+/* === Market === */
+.market-info {
+    color: var(--text-dim);
+    margin-bottom: 12px;
+}
+
+.btn-refresh {
+    padding: 8px 20px;
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--text-dim);
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all 0.2s;
+}
+.btn-refresh:hover { border-color: var(--gold); color: var(--gold); }
+
+/* === Training === */
+.train-section h3 {
+    margin-bottom: 12px;
+    color: var(--text);
+}
+
+.horse-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.horse-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.horse-list-item:hover { border-color: var(--accent); }
+.horse-list-item.selected { border-color: var(--gold); }
+
+.horse-list-item .horse-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.horse-list-item .mini-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.horse-list-item .energy-mini {
+    font-size: 0.85rem;
+}
+
+.selected-horse-card {
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 2px solid var(--gold);
+}
+
+.training-programs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.program {
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.program:hover { border-color: var(--accent); transform: translateY(-2px); }
+.program-icon { font-size: 2rem; margin-bottom: 8px; }
+.program h4 { margin-bottom: 4px; }
+.program p { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; }
+.program .cost { font-weight: bold; color: var(--green); }
+
+/* === Race Setup === */
+.race-list h3 { margin-bottom: 12px; }
+
+.race-entry {
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.race-entry:hover { border-color: var(--accent); }
+
+.race-entry .race-info h4 { color: var(--gold); margin-bottom: 4px; }
+.race-entry .race-info p { font-size: 0.85rem; color: var(--text-dim); }
+
+.race-entry .race-prize {
+    text-align: right;
+}
+.race-entry .race-prize .prize-amount {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--green);
+}
+.race-entry .race-prize .entry-fee {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.race-details {
+    background: var(--bg-card);
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.race-details p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+}
+
+#race-horse-select {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.betting-section {
+    background: var(--bg-card);
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.betting-section h4 { margin-bottom: 10px; color: var(--gold); }
+
+.bet-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.bet-controls label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+}
+
+.bet-controls select, .bet-controls input {
+    padding: 6px 10px;
+    background: var(--bg-dark);
+    color: var(--text);
+    border: 1px solid var(--text-dim);
+    border-radius: 4px;
+}
+
+.bet-controls input { width: 100px; }
+.odds { font-weight: bold; color: var(--gold); }
+
+.btn-race {
+    padding: 14px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+.btn-race:hover { background: var(--accent-glow); transform: scale(1.02); }
+.btn-race:disabled { background: #555; cursor: not-allowed; transform: none; }
+
+.btn-back {
+    padding: 10px 24px;
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--text-dim);
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.btn-back:hover { color: var(--text); border-color: var(--text); }
+
+/* === Racetrack Screen === */
+#screen-race {
+    padding: 10px 20px;
+    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 20%, var(--grass) 20%, var(--grass) 100%);
+    min-height: 100vh;
+}
+
+.race-hud {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0,0,0,0.7);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.race-name { font-size: 1.3rem; font-weight: bold; color: var(--gold); }
+.race-distance { color: var(--text-dim); }
+
+.commentary {
+    background: rgba(0,0,0,0.8);
+    padding: 10px 16px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    color: var(--gold);
+    font-weight: 500;
+}
+
+#racetrack {
+    position: relative;
+    background: var(--track-brown);
+    border-radius: 10px;
+    padding: 10px 0;
+    border: 4px solid var(--rail);
+    overflow: hidden;
+}
+
+.track-markings {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.start-line {
+    position: absolute;
+    left: 60px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: repeating-linear-gradient(180deg, #fff 0, #fff 8px, transparent 8px, transparent 16px);
+}
+
+.finish-line {
+    position: absolute;
+    right: 40px;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 0 0 / 6px 6px;
+}
+
+.race-lane {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 50px 0 10px;
+    position: relative;
+    border-bottom: 1px dashed rgba(255,255,255,0.15);
+}
+
+.race-lane:last-child { border-bottom: none; }
+
+.lane-number {
+    width: 24px;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.horse-sprite {
+    position: absolute;
+    left: 60px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: left 0.1s linear;
+    z-index: 2;
+}
+
+.horse-body {
+    font-size: 1.8rem;
+    line-height: 1;
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5));
+}
+
+.horse-label {
+    font-size: 0.65rem;
+    background: rgba(0,0,0,0.7);
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    color: #fff;
+}
+
+.position-board {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.pos-entry {
+    background: rgba(0,0,0,0.7);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pos-number {
+    font-weight: bold;
+    width: 20px;
+}
+
+.pos-entry.first .pos-number { color: var(--gold); }
+.pos-entry.second .pos-number { color: var(--silver); }
+.pos-entry.third .pos-number { color: var(--bronze); }
+
+/* === Results Screen === */
+#screen-results {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 40px;
+    background: linear-gradient(180deg, var(--bg-dark), var(--bg-mid));
+}
+#screen-results.active { display: flex; }
+
+#results-title {
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 30px;
+}
+
+.podium {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.podium-place {
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 10px 10px 0 0;
+    min-width: 120px;
+}
+
+.podium-place.first {
+    background: linear-gradient(180deg, rgba(255,215,0,0.3), rgba(255,215,0,0.1));
+    border: 2px solid var(--gold);
+    border-bottom: none;
+    min-height: 160px;
+}
+.podium-place.second {
+    background: linear-gradient(180deg, rgba(192,192,192,0.3), rgba(192,192,192,0.1));
+    border: 2px solid var(--silver);
+    border-bottom: none;
+    min-height: 120px;
+}
+.podium-place.third {
+    background: linear-gradient(180deg, rgba(205,127,50,0.3), rgba(205,127,50,0.1));
+    border: 2px solid var(--bronze);
+    border-bottom: none;
+    min-height: 90px;
+}
+
+.podium-position { font-size: 1.8rem; font-weight: bold; }
+.podium-place.first .podium-position { color: var(--gold); }
+.podium-place.second .podium-position { color: var(--silver); }
+.podium-place.third .podium-position { color: var(--bronze); }
+
+.podium-horse { font-size: 0.95rem; margin-top: 4px; font-weight: bold; }
+.podium-owner { font-size: 0.75rem; color: var(--text-dim); }
+
+.results-table {
+    width: 100%;
+    max-width: 600px;
+    background: var(--bg-card);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.result-row {
+    display: flex;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: center;
+}
+
+.result-row:last-child { border-bottom: none; }
+.result-row .pos { width: 30px; font-weight: bold; }
+.result-row.first .pos { color: var(--gold); }
+.result-row.second .pos { color: var(--silver); }
+.result-row.third .pos { color: var(--bronze); }
+.result-row .name { flex: 1; }
+.result-row .time { width: 70px; text-align: right; color: var(--text-dim); }
+
+.earnings {
+    font-size: 1.2rem;
+    margin: 16px 0;
+    padding: 12px 24px;
+    background: var(--bg-card);
+    border-radius: 8px;
+}
+
+.earnings.won { color: var(--green); border: 2px solid var(--green); }
+.earnings.lost { color: var(--accent); }
+
+.bet-result {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+.bet-result.won { color: var(--green); background: rgba(46,204,113,0.1); }
+.bet-result.lost { color: var(--accent); background: rgba(233,69,96,0.1); }
+
+.btn-continue {
+    padding: 14px 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background: var(--gold);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+.btn-continue:hover { transform: scale(1.05); }
+
+/* === Setup Screen === */
+#screen-setup {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 60px;
+}
+#screen-setup.active { display: flex; }
+#screen-setup h2 { color: var(--gold); font-size: 2rem; margin-bottom: 30px; }
+
+.setup-form {
+    width: 100%;
+    max-width: 700px;
+}
+
+.setup-form label {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 1rem;
+}
+
+.setup-form input[type="text"] {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px 14px;
+    font-size: 1rem;
+    background: var(--bg-card);
+    border: 2px solid var(--text-dim);
+    color: var(--text);
+    border-radius: 6px;
+}
+.setup-form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.setup-form h3 {
+    margin: 24px 0 12px;
+    color: var(--text);
+}
+
+#btn-confirm-setup {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: var(--gold);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 2px;
+}
+#btn-confirm-setup:disabled { background: #555; color: #888; cursor: not-allowed; }
+#btn-confirm-setup:not(:disabled):hover { transform: scale(1.02); }
+
+/* === Empty State === */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+}
+
+/* === Notification === */
+.notification {
+    position: fixed;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-card);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: bottom 0.3s ease;
+    z-index: 100;
+    border: 1px solid var(--text-dim);
+    white-space: nowrap;
+}
+
+.notification.show { bottom: 30px; }
+.notification.success { border-color: var(--green); }
+.notification.error { border-color: var(--accent); }
+
+/* === Records === */
+.records-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.record-entry {
+    background: var(--bg-card);
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.record-entry .record-info { flex: 1; }
+.record-entry .record-info h4 { color: var(--text); font-size: 0.95rem; }
+.record-entry .record-info p { font-size: 0.8rem; color: var(--text-dim); }
+.record-result { font-weight: bold; font-size: 1.1rem; }
+.record-result.win { color: var(--gold); }
+.record-result.place { color: var(--silver); }
+.record-result.loss { color: var(--text-dim); }
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .title-banner h1 { font-size: 2rem; letter-spacing: 2px; }
+    .tab-bar { overflow-x: auto; }
+    .tab { padding: 8px 14px; font-size: 0.85rem; white-space: nowrap; }
+    .horse-grid { grid-template-columns: 1fr; }
+    .training-programs { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+    .hud { flex-direction: column; gap: 8px; text-align: center; }
+    .podium { flex-direction: column; align-items: center; }
+    .podium-place { min-height: auto !important; border-radius: 10px !important; border: 2px solid; min-width: 200px; }
+}
