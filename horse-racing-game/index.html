@@ -2,28 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Derby Champions Club</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Equine Legacy</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏇</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <div id="app">
         <!-- Title Screen -->
         <div id="screen-title" class="screen active">
             <div class="title-banner">
-                <h1>DERBY CHAMPIONS CLUB</h1>
-                <p class="subtitle">Own. Train. Race. Win.</p>
+                <div class="title-logo">🏇</div>
+                <h1>EQUINE LEGACY</h1>
+                <p class="subtitle">Breed. Train. Race. Legend.</p>
             </div>
             <div class="title-menu">
                 <button onclick="Game.startNewGame()">NEW GAME</button>
                 <button onclick="Game.loadGame()">CONTINUE</button>
             </div>
             <div class="title-footer">
-                <p>Inspired by Derby Owners Club</p>
+                <p>A Derby Owners Club Tribute</p>
             </div>
         </div>
 
-        <!-- Stable Screen (Main Hub) -->
+        <!-- New Game Setup -->
+        <div id="screen-setup" class="screen">
+            <h2>New Owner Registration</h2>
+            <div class="setup-form">
+                <label>Owner Name:<input type="text" id="input-owner" maxlength="20" placeholder="Your name"></label>
+                <label>Stable Name:<input type="text" id="input-stable" maxlength="24" placeholder="e.g. Sunset Stables"></label>
+                <h3>Choose Your Starter Horse</h3>
+                <div id="starter-horses" class="horse-grid"></div>
+                <button onclick="Game.confirmNewGame()" id="btn-confirm-setup" disabled>BEGIN</button>
+            </div>
+        </div>
+
+        <!-- Main Hub -->
         <div id="screen-stable" class="screen">
             <header class="hud">
                 <div class="hud-left">
@@ -32,14 +48,17 @@
                 </div>
                 <div class="hud-right">
                     <span class="money" id="hud-money">$0</span>
-                    <span class="day" id="hud-day">Day 1</span>
+                    <span class="season" id="hud-season">Season 1</span>
+                    <span class="day" id="hud-day">Week 1</span>
                 </div>
             </header>
             <nav class="tab-bar">
                 <button class="tab active" data-tab="stable" onclick="UI.switchTab('stable')">Stable</button>
-                <button class="tab" data-tab="market" onclick="UI.switchTab('market')">Horse Market</button>
+                <button class="tab" data-tab="market" onclick="UI.switchTab('market')">Market</button>
                 <button class="tab" data-tab="train" onclick="UI.switchTab('train')">Training</button>
-                <button class="tab" data-tab="race" onclick="UI.switchTab('race')">Race Day</button>
+                <button class="tab" data-tab="feed" onclick="UI.switchTab('feed')">Care</button>
+                <button class="tab" data-tab="race" onclick="UI.switchTab('race')">Race</button>
+                <button class="tab" data-tab="breed" onclick="UI.switchTab('breed')">Breeding</button>
                 <button class="tab" data-tab="records" onclick="UI.switchTab('records')">Records</button>
             </nav>
 
@@ -47,16 +66,22 @@
             <div id="tab-stable" class="tab-content active">
                 <h2>Your Stable</h2>
                 <div id="stable-horses" class="horse-grid"></div>
-                <div id="stable-empty" class="empty-state">
-                    <p>Your stable is empty! Visit the Horse Market to buy your first horse.</p>
+                <div id="stable-empty" class="empty-state"><p>Your stable is empty! Visit the Market to buy your first horse.</p></div>
+            </div>
+
+            <!-- Horse Detail Modal -->
+            <div id="horse-detail-modal" class="modal" style="display:none">
+                <div class="modal-content">
+                    <button class="modal-close" onclick="UI.closeModal()">&times;</button>
+                    <div id="horse-detail-body"></div>
                 </div>
             </div>
 
-            <!-- Horse Market Tab -->
+            <!-- Market Tab -->
             <div id="tab-market" class="tab-content">
                 <h2>Horse Market</h2>
-                <p class="market-info">New horses available each day. Prices reflect their potential.</p>
-                <button class="btn-refresh" onclick="Game.refreshMarket()">Refresh Market ($500)</button>
+                <p class="market-info">New horses available each season. Prices reflect their genetic potential.</p>
+                <button class="btn-refresh" onclick="Game.refreshMarket()">Refresh ($500)</button>
                 <div id="market-horses" class="horse-grid"></div>
             </div>
 
@@ -67,39 +92,30 @@
                     <h3>Select a Horse to Train</h3>
                     <div id="train-horse-list" class="horse-list"></div>
                 </div>
-                <div id="train-options" class="train-section" style="display:none;">
+                <div id="train-options" class="train-section" style="display:none">
                     <div id="train-selected-horse" class="selected-horse-card"></div>
-                    <h3>Training Programs</h3>
-                    <div class="training-programs">
-                        <div class="program" onclick="Game.trainHorse('speed')">
-                            <div class="program-icon">🏃</div>
-                            <h4>Sprint Drills</h4>
-                            <p>Boost Speed</p>
-                            <span class="cost">$300</span>
+                    <h3>Training Programs <span class="help-text">(Interactive mini-games!)</span></h3>
+                    <div class="training-programs" id="training-programs"></div>
+                </div>
+            </div>
+
+            <!-- Care / Feeding Tab -->
+            <div id="tab-feed" class="tab-content">
+                <h2>Horse Care</h2>
+                <div id="feed-select" class="train-section">
+                    <h3>Select a Horse</h3>
+                    <div id="feed-horse-list" class="horse-list"></div>
+                </div>
+                <div id="feed-options" class="train-section" style="display:none">
+                    <div id="feed-selected-horse" class="selected-horse-card"></div>
+                    <div class="care-sections">
+                        <div class="care-section">
+                            <h3>Feeding</h3>
+                            <div class="food-grid" id="food-grid"></div>
                         </div>
-                        <div class="program" onclick="Game.trainHorse('stamina')">
-                            <div class="program-icon">💪</div>
-                            <h4>Endurance Run</h4>
-                            <p>Boost Stamina</p>
-                            <span class="cost">$300</span>
-                        </div>
-                        <div class="program" onclick="Game.trainHorse('acceleration')">
-                            <div class="program-icon">⚡</div>
-                            <h4>Gate Practice</h4>
-                            <p>Boost Acceleration</p>
-                            <span class="cost">$300</span>
-                        </div>
-                        <div class="program" onclick="Game.trainHorse('luck')">
-                            <div class="program-icon">🍀</div>
-                            <h4>Free Roam</h4>
-                            <p>Boost Luck</p>
-                            <span class="cost">$200</span>
-                        </div>
-                        <div class="program" onclick="Game.restHorse()">
-                            <div class="program-icon">😴</div>
-                            <h4>Rest & Recovery</h4>
-                            <p>Restore Energy</p>
-                            <span class="cost">Free</span>
+                        <div class="care-section">
+                            <h3>Activities</h3>
+                            <div class="activity-grid" id="activity-grid"></div>
                         </div>
                     </div>
                 </div>
@@ -113,7 +129,7 @@
                         <h3>Available Races</h3>
                         <div id="race-entries"></div>
                     </div>
-                    <div id="race-entry-form" style="display:none;">
+                    <div id="race-entry-form" style="display:none">
                         <h3 id="race-title"></h3>
                         <div id="race-details" class="race-details"></div>
                         <h4>Select Your Horse</h4>
@@ -121,14 +137,8 @@
                         <div class="betting-section">
                             <h4>Place Your Bet</h4>
                             <div class="bet-controls">
-                                <label>Bet on:
-                                    <select id="bet-horse">
-                                        <option value="">-- No Bet --</option>
-                                    </select>
-                                </label>
-                                <label>Amount:
-                                    <input type="number" id="bet-amount" min="0" step="100" value="0">
-                                </label>
+                                <label>Bet on:<select id="bet-horse"><option value="">-- No Bet --</option></select></label>
+                                <label>Amount:<input type="number" id="bet-amount" min="0" step="100" value="0"></label>
                                 <span id="bet-odds" class="odds"></span>
                             </div>
                         </div>
@@ -138,13 +148,67 @@
                 </div>
             </div>
 
+            <!-- Breeding Tab -->
+            <div id="tab-breed" class="tab-content">
+                <h2>Breeding Barn</h2>
+                <div id="breed-intro" class="breed-section">
+                    <p class="market-info">Pair retired horses or use stud services to breed the next generation. Genetics matter!</p>
+                </div>
+                <div class="breed-panels">
+                    <div class="breed-panel">
+                        <h3>Your Retired Horses</h3>
+                        <div id="breed-retired-list" class="horse-list"></div>
+                    </div>
+                    <div class="breed-panel">
+                        <h3>Stud Market</h3>
+                        <div id="stud-market-list" class="horse-list"></div>
+                    </div>
+                </div>
+                <div id="breed-pairing" class="breed-pairing" style="display:none">
+                    <h3>Breeding Pair</h3>
+                    <div class="pair-display">
+                        <div id="breed-sire" class="pair-horse"></div>
+                        <div class="pair-cross">X</div>
+                        <div id="breed-dam" class="pair-horse"></div>
+                    </div>
+                    <div id="breed-prediction" class="breed-prediction"></div>
+                    <button class="btn-breed" onclick="Game.confirmBreed()">BREED ($2000)</button>
+                    <button class="btn-back" onclick="Game.cancelBreed()">Cancel</button>
+                </div>
+                <div id="breed-result" class="breed-result" style="display:none">
+                    <h3>New Foal Born!</h3>
+                    <div id="foal-card"></div>
+                    <button class="btn-continue" onclick="Game.acceptFoal()">Welcome to the Stable!</button>
+                </div>
+            </div>
+
             <!-- Records Tab -->
             <div id="tab-records" class="tab-content">
-                <h2>Race Records</h2>
-                <div id="records-list" class="records-list"></div>
-                <div id="records-empty" class="empty-state">
-                    <p>No races completed yet. Enter a race to start building your record!</p>
+                <h2>Hall of Records</h2>
+                <div class="records-tabs">
+                    <button class="rec-tab active" onclick="UI.showRecordTab('races')">Race History</button>
+                    <button class="rec-tab" onclick="UI.showRecordTab('bloodlines')">Bloodlines</button>
+                    <button class="rec-tab" onclick="UI.showRecordTab('achievements')">Achievements</button>
                 </div>
+                <div id="records-races" class="records-section active"><div id="records-list" class="records-list"></div></div>
+                <div id="records-bloodlines" class="records-section"><div id="bloodline-tree"></div></div>
+                <div id="records-achievements" class="records-section"><div id="achievements-list"></div></div>
+                <div id="records-empty" class="empty-state"><p>No records yet. Start racing to build your legacy!</p></div>
+            </div>
+        </div>
+
+        <!-- Training Mini-Game Screen -->
+        <div id="screen-minigame" class="screen">
+            <div class="minigame-hud">
+                <span id="mg-title" class="mg-title"></span>
+                <span id="mg-stat" class="mg-stat"></span>
+            </div>
+            <div id="mg-instructions" class="mg-instructions"></div>
+            <div id="mg-arena" class="mg-arena"></div>
+            <div id="mg-result" class="mg-result" style="display:none">
+                <h3 id="mg-result-title"></h3>
+                <p id="mg-result-detail"></p>
+                <button class="btn-continue" onclick="MiniGame.finish()">Continue</button>
             </div>
         </div>
 
@@ -152,18 +216,38 @@
         <div id="screen-race" class="screen">
             <div class="race-hud">
                 <div id="race-name-display" class="race-name"></div>
-                <div id="race-distance-display" class="race-distance"></div>
+                <div class="race-hud-right">
+                    <div id="race-distance-display" class="race-distance"></div>
+                    <div id="race-stamina-hud" class="race-stamina-hud">
+                        <span>Stamina</span>
+                        <div class="race-stamina-bar"><div id="race-stamina-fill" class="race-stamina-fill"></div></div>
+                    </div>
+                </div>
             </div>
             <div id="race-commentary" class="commentary"></div>
             <div id="racetrack">
                 <div class="track-markings">
                     <div class="start-line"></div>
                     <div class="finish-line"></div>
-                    <div class="distance-markers" id="distance-markers"></div>
                 </div>
                 <div id="race-lanes"></div>
             </div>
             <div id="race-positions" class="position-board"></div>
+            <!-- Manual Controls -->
+            <div id="race-controls" class="race-controls">
+                <button id="btn-hold" class="ctrl-btn ctrl-hold" ontouchstart="RaceEngine.holdStart()" ontouchend="RaceEngine.holdEnd()" onmousedown="RaceEngine.holdStart()" onmouseup="RaceEngine.holdEnd()">
+                    <span class="ctrl-icon">&#9995;</span>HOLD
+                </button>
+                <button id="btn-whip" class="ctrl-btn ctrl-whip" onclick="RaceEngine.whip()">
+                    <span class="ctrl-icon">&#128165;</span>WHIP
+                </button>
+                <button id="btn-inside" class="ctrl-btn ctrl-pos" onclick="RaceEngine.moveInside()">
+                    <span class="ctrl-icon">&#8593;</span>INSIDE
+                </button>
+                <button id="btn-outside" class="ctrl-btn ctrl-pos" onclick="RaceEngine.moveOutside()">
+                    <span class="ctrl-icon">&#8595;</span>OUTSIDE
+                </button>
+            </div>
         </div>
 
         <!-- Results Screen -->
@@ -173,25 +257,8 @@
             <div id="results-table" class="results-table"></div>
             <div id="results-earnings" class="earnings"></div>
             <div id="results-bet" class="bet-result"></div>
+            <div id="results-mood" class="mood-change"></div>
             <button class="btn-continue" onclick="Game.returnToStable()">Continue</button>
-        </div>
-
-        <!-- New Game Setup -->
-        <div id="screen-setup" class="screen">
-            <h2>New Owner Registration</h2>
-            <div class="setup-form">
-                <label>
-                    Owner Name:
-                    <input type="text" id="input-owner" maxlength="20" placeholder="Your name">
-                </label>
-                <label>
-                    Stable Name:
-                    <input type="text" id="input-stable" maxlength="24" placeholder="e.g. Sunset Stables">
-                </label>
-                <h3>Choose Your Starter Horse</h3>
-                <div id="starter-horses" class="horse-grid"></div>
-                <button onclick="Game.confirmNewGame()" id="btn-confirm-setup" disabled>BEGIN</button>
-            </div>
         </div>
 
         <!-- Notification -->

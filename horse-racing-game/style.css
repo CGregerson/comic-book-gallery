@@ -1,889 +1,370 @@
 /* === Reset & Base === */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
-    --bg-dark: #1a1a2e;
-    --bg-mid: #16213e;
-    --bg-card: #0f3460;
-    --accent: #e94560;
-    --accent-glow: #ff6b81;
-    --gold: #ffd700;
-    --silver: #c0c0c0;
-    --bronze: #cd7f32;
-    --green: #2ecc71;
-    --green-dark: #27ae60;
-    --text: #eee;
-    --text-dim: #aaa;
-    --track-brown: #8B6914;
-    --track-light: #C4A44A;
-    --grass: #2d5a1e;
-    --rail: #fff;
+    --bg-dark: #1a1a2e; --bg-mid: #16213e; --bg-card: #0f3460;
+    --accent: #e94560; --accent-glow: #ff6b81;
+    --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32;
+    --green: #2ecc71; --green-dark: #27ae60;
+    --text: #eee; --text-dim: #aaa;
+    --track-brown: #8B6914; --grass: #2d5a1e; --rail: #fff;
+    --mood-happy: #2ecc71; --mood-neutral: #f39c12; --mood-sad: #e74c3c;
 }
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--bg-dark);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-#app {
-    max-width: 1200px;
-    margin: 0 auto;
-    min-height: 100vh;
-}
-
-/* === Screens === */
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: var(--text); min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+#app { max-width: 1200px; margin: 0 auto; min-height: 100vh; }
 .screen { display: none; padding: 20px; }
 .screen.active { display: block; }
 
-/* === Title Screen === */
-#screen-title {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    text-align: center;
-    background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 50%, var(--grass) 100%);
-}
+/* === Title === */
+#screen-title { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-mid) 40%, var(--grass) 100%); }
 #screen-title.active { display: flex; }
-
-.title-banner h1 {
-    font-size: 3.5rem;
-    color: var(--gold);
-    text-shadow: 0 0 40px rgba(255,215,0,0.3), 2px 2px 0 #333;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
-}
-
-.title-banner .subtitle {
-    font-size: 1.4rem;
-    color: var(--text-dim);
-    letter-spacing: 8px;
-    text-transform: uppercase;
-}
-
-.title-menu {
-    margin-top: 60px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.title-menu button {
-    padding: 16px 60px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border: 2px solid var(--gold);
-    background: transparent;
-    color: var(--gold);
-    cursor: pointer;
-    letter-spacing: 3px;
-    transition: all 0.3s;
-}
-
-.title-menu button:hover {
-    background: var(--gold);
-    color: var(--bg-dark);
-}
-
-.title-footer {
-    margin-top: 80px;
-    color: var(--text-dim);
-    font-size: 0.85rem;
-}
+.title-logo { font-size: 5rem; margin-bottom: 10px; animation: bounce 2s ease-in-out infinite; }
+@keyframes bounce { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-12px); } }
+.title-banner h1 { font-size: 3rem; color: var(--gold); text-shadow: 0 0 40px rgba(255,215,0,0.3), 2px 2px 0 #333; letter-spacing: 4px; margin-bottom: 8px; }
+.title-banner .subtitle { font-size: 1.2rem; color: var(--text-dim); letter-spacing: 8px; text-transform: uppercase; }
+.title-menu { margin-top: 50px; display: flex; flex-direction: column; gap: 15px; }
+.title-menu button { padding: 14px 60px; font-size: 1.1rem; font-weight: bold; border: 2px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; letter-spacing: 3px; transition: all 0.3s; }
+.title-menu button:hover { background: var(--gold); color: var(--bg-dark); }
+.title-footer { margin-top: 60px; color: var(--text-dim); font-size: 0.85rem; }
 
 /* === HUD === */
-.hud {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    background: var(--bg-mid);
-    border-bottom: 2px solid var(--accent);
-    margin: -20px -20px 20px -20px;
-}
-
-.hud-left { display: flex; gap: 20px; align-items: center; }
-.owner-name { font-weight: bold; font-size: 1.1rem; }
-.stable-name { color: var(--text-dim); font-style: italic; }
-.hud-right { display: flex; gap: 20px; align-items: center; }
-.money {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: var(--green);
-}
-.day { color: var(--gold); font-weight: bold; }
+.hud { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--bg-mid); border-bottom: 2px solid var(--accent); margin: -20px -20px 16px -20px; flex-wrap: wrap; gap: 6px; }
+.hud-left { display: flex; gap: 14px; align-items: center; }
+.owner-name { font-weight: bold; font-size: 1rem; }
+.stable-name { color: var(--text-dim); font-style: italic; font-size: 0.9rem; }
+.hud-right { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.money { font-weight: bold; font-size: 1.1rem; color: var(--green); }
+.season { color: var(--accent-glow); font-weight: bold; font-size: 0.9rem; }
+.day { color: var(--gold); font-weight: bold; font-size: 0.9rem; }
 
 /* === Tabs === */
-.tab-bar {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid var(--bg-card);
-    padding-bottom: 0;
-}
-
-.tab {
-    padding: 10px 24px;
-    background: transparent;
-    border: none;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-}
-
+.tab-bar { display: flex; gap: 2px; margin-bottom: 16px; border-bottom: 2px solid var(--bg-card); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tab { padding: 8px 14px; background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: 0.85rem; font-weight: 600; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
 .tab:hover { color: var(--text); }
-.tab.active {
-    color: var(--gold);
-    border-bottom-color: var(--gold);
-}
-
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
-.tab-content h2 {
-    margin-bottom: 16px;
-    color: var(--gold);
-    font-size: 1.5rem;
-}
+.tab-content h2 { margin-bottom: 14px; color: var(--gold); font-size: 1.4rem; }
+.help-text { font-size: 0.8rem; color: var(--text-dim); font-weight: normal; }
 
 /* === Horse Cards === */
-.horse-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-    margin-top: 12px;
-}
-
-.horse-card {
-    background: var(--bg-card);
-    border-radius: 10px;
-    padding: 16px;
-    border: 2px solid transparent;
-    transition: all 0.2s;
-    cursor: default;
-    position: relative;
-}
-
+.horse-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; margin-top: 10px; }
+.horse-card { background: var(--bg-card); border-radius: 10px; padding: 14px; border: 2px solid transparent; transition: all 0.2s; cursor: pointer; position: relative; }
 .horse-card:hover { border-color: var(--accent); }
 .horse-card.selected { border-color: var(--gold); box-shadow: 0 0 15px rgba(255,215,0,0.2); }
-
-.horse-card .horse-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.horse-card .horse-name {
-    font-size: 1.15rem;
-    font-weight: bold;
-    color: var(--text);
-}
-
-.horse-card .horse-color {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-}
-
-.horse-card .horse-breed {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-}
-
-.horse-card .stat-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.stat-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.stat-label {
-    width: 85px;
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.stat-bar {
-    flex: 1;
-    height: 10px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.stat-fill {
-    height: 100%;
-    border-radius: 5px;
-    transition: width 0.5s ease;
-}
-
+.horse-card .horse-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.horse-card .horse-name { font-size: 1.1rem; font-weight: bold; }
+.horse-card .horse-color { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; }
+.horse-card .horse-breed { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px; }
+.horse-card .horse-gen-tag { display: inline-block; font-size: 0.65rem; padding: 1px 6px; border-radius: 3px; background: var(--accent); color: #fff; margin-left: 6px; }
+.horse-card .stat-bars { display: flex; flex-direction: column; gap: 4px; }
+.stat-row { display: flex; align-items: center; gap: 6px; }
+.stat-label { width: 65px; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.stat-bar { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+.stat-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 .stat-fill.speed { background: linear-gradient(90deg, #e74c3c, #e94560); }
 .stat-fill.stamina { background: linear-gradient(90deg, #2ecc71, #27ae60); }
 .stat-fill.accel { background: linear-gradient(90deg, #3498db, #2980b9); }
-.stat-fill.luck { background: linear-gradient(90deg, #f39c12, #e67e22); }
+.stat-fill.agility { background: linear-gradient(90deg, #9b59b6, #8e44ad); }
+.stat-fill.guts { background: linear-gradient(90deg, #f39c12, #e67e22); }
+.stat-value { width: 24px; text-align: right; font-size: 0.7rem; font-weight: bold; }
 
-.stat-value {
-    width: 28px;
-    text-align: right;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
+/* Mood & Energy bars */
+.horse-card .mood-energy { margin-top: 6px; display: flex; gap: 10px; }
+.mini-bar-group { flex: 1; }
+.mini-bar-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 2px; display: flex; justify-content: space-between; }
+.mini-bar { height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.mini-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.mini-bar-fill.energy { background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71); }
+.mini-bar-fill.mood-good { background: var(--mood-happy); }
+.mini-bar-fill.mood-ok { background: var(--mood-neutral); }
+.mini-bar-fill.mood-bad { background: var(--mood-sad); }
 
-.horse-card .horse-meta {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--text-dim);
-}
+/* Traits */
+.traits-row { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+.trait-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 10px; background: rgba(255,215,0,0.15); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
+.trait-tag.hidden-trait { background: rgba(155,89,182,0.15); color: #bb8fce; border-color: rgba(155,89,182,0.3); }
 
-.horse-card .horse-energy {
-    margin-top: 8px;
-}
-
-.energy-bar {
-    height: 6px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.energy-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71);
-    border-radius: 3px;
-    transition: width 0.3s;
-}
-
-.horse-card .price {
-    margin-top: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--green);
-}
-
-.horse-card .btn-buy,
-.horse-card .btn-sell {
-    margin-top: 10px;
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-}
-
-.btn-buy {
-    background: var(--green);
-    color: #fff;
-}
+.horse-card .horse-meta { margin-top: 8px; display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); flex-wrap: wrap; gap: 4px; }
+.horse-card .price { margin-top: 8px; font-size: 1rem; font-weight: bold; color: var(--green); }
+.horse-card .btn-buy, .horse-card .btn-sell, .horse-card .btn-retire { margin-top: 8px; width: 100%; padding: 7px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+.btn-buy { background: var(--green); color: #fff; }
 .btn-buy:hover { background: var(--green-dark); }
 .btn-buy:disabled { background: #555; cursor: not-allowed; }
-
-.btn-sell {
-    background: var(--accent);
-    color: #fff;
-}
+.btn-sell { background: var(--accent); color: #fff; }
 .btn-sell:hover { background: var(--accent-glow); }
+.btn-retire { background: #8e44ad; color: #fff; }
+.btn-retire:hover { background: #9b59b6; }
+.horse-card .btn-row { display: flex; gap: 6px; margin-top: 8px; }
+.horse-card .btn-row button { flex: 1; }
+
+/* Status badges */
+.status-badge { position: absolute; top: 8px; right: 8px; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
+.status-badge.retired { background: #8e44ad; color: #fff; }
+.status-badge.foal { background: var(--gold); color: var(--bg-dark); }
+.status-badge.peak { background: var(--green); color: #fff; }
+.status-badge.declining { background: var(--accent); color: #fff; }
 
 /* === Market === */
-.market-info {
-    color: var(--text-dim);
-    margin-bottom: 12px;
-}
-
-.btn-refresh {
-    padding: 8px 20px;
-    background: var(--bg-card);
-    color: var(--text);
-    border: 1px solid var(--text-dim);
-    border-radius: 6px;
-    cursor: pointer;
-    margin-bottom: 16px;
-    transition: all 0.2s;
-}
+.market-info { color: var(--text-dim); margin-bottom: 10px; font-size: 0.9rem; }
+.btn-refresh { padding: 7px 16px; background: var(--bg-card); color: var(--text); border: 1px solid var(--text-dim); border-radius: 6px; cursor: pointer; margin-bottom: 14px; font-size: 0.85rem; }
 .btn-refresh:hover { border-color: var(--gold); color: var(--gold); }
 
 /* === Training === */
-.train-section h3 {
-    margin-bottom: 12px;
-    color: var(--text);
-}
-
-.horse-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.horse-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    background: var(--bg-card);
-    border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s;
-}
-
+.train-section h3 { margin-bottom: 10px; color: var(--text); font-size: 1.1rem; }
+.horse-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.horse-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg-card); border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
 .horse-list-item:hover { border-color: var(--accent); }
 .horse-list-item.selected { border-color: var(--gold); }
-
-.horse-list-item .horse-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.horse-list-item .mini-color {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-}
-
-.horse-list-item .energy-mini {
-    font-size: 0.85rem;
-}
-
-.selected-horse-card {
-    background: var(--bg-card);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 20px;
-    border: 2px solid var(--gold);
-}
-
-.training-programs {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
-}
-
-.program {
-    background: var(--bg-card);
-    border-radius: 10px;
-    padding: 20px 16px;
-    text-align: center;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s;
-}
-
+.horse-list-item .horse-info { display: flex; align-items: center; gap: 10px; }
+.horse-list-item .mini-color { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; }
+.horse-list-item .energy-mini { font-size: 0.8rem; }
+.selected-horse-card { background: var(--bg-card); border-radius: 10px; padding: 14px; margin-bottom: 16px; border: 2px solid var(--gold); }
+.training-programs { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.program { background: var(--bg-card); border-radius: 10px; padding: 16px 12px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
 .program:hover { border-color: var(--accent); transform: translateY(-2px); }
-.program-icon { font-size: 2rem; margin-bottom: 8px; }
-.program h4 { margin-bottom: 4px; }
-.program p { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 8px; }
-.program .cost { font-weight: bold; color: var(--green); }
+.program-icon { font-size: 1.8rem; margin-bottom: 6px; }
+.program h4 { margin-bottom: 3px; font-size: 0.9rem; }
+.program p { font-size: 0.7rem; color: var(--text-dim); margin-bottom: 6px; }
+.program .cost { font-weight: bold; color: var(--green); font-size: 0.85rem; }
+
+/* === Care / Feeding === */
+.care-sections { display: flex; flex-direction: column; gap: 20px; }
+.care-section h3 { margin-bottom: 10px; font-size: 1.1rem; }
+.food-grid, .activity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.food-item, .activity-item { background: var(--bg-card); border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+.food-item:hover, .activity-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+.food-item .food-icon, .activity-item .act-icon { font-size: 1.8rem; margin-bottom: 6px; }
+.food-item h4, .activity-item h4 { font-size: 0.85rem; margin-bottom: 3px; }
+.food-item p, .activity-item p { font-size: 0.65rem; color: var(--text-dim); margin-bottom: 4px; }
+.food-item .cost, .activity-item .cost { font-weight: bold; color: var(--green); font-size: 0.8rem; }
+.food-item .effects, .activity-item .effects { font-size: 0.6rem; color: var(--gold); margin-top: 4px; }
+
+/* === Breeding === */
+.breed-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.breed-panel h3 { margin-bottom: 10px; font-size: 1rem; }
+.breed-pairing { background: var(--bg-card); border-radius: 10px; padding: 20px; text-align: center; }
+.breed-pairing h3 { color: var(--gold); margin-bottom: 16px; }
+.pair-display { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 16px; }
+.pair-horse { background: var(--bg-mid); border-radius: 8px; padding: 14px; min-width: 160px; }
+.pair-cross { font-size: 2rem; font-weight: bold; color: var(--accent); }
+.breed-prediction { background: var(--bg-mid); border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.85rem; }
+.btn-breed { padding: 12px 30px; font-size: 1.1rem; font-weight: bold; background: #8e44ad; color: #fff; border: none; border-radius: 8px; cursor: pointer; letter-spacing: 1px; }
+.btn-breed:hover { background: #9b59b6; }
+.breed-result { text-align: center; padding: 20px; }
+.breed-result h3 { color: var(--gold); font-size: 1.5rem; margin-bottom: 16px; }
 
 /* === Race Setup === */
-.race-list h3 { margin-bottom: 12px; }
-
-.race-entry {
-    background: var(--bg-card);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s;
-}
-
+.race-list h3 { margin-bottom: 10px; }
+.race-entry { background: var(--bg-card); border-radius: 10px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
 .race-entry:hover { border-color: var(--accent); }
-
-.race-entry .race-info h4 { color: var(--gold); margin-bottom: 4px; }
-.race-entry .race-info p { font-size: 0.85rem; color: var(--text-dim); }
-
-.race-entry .race-prize {
-    text-align: right;
-}
-.race-entry .race-prize .prize-amount {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--green);
-}
-.race-entry .race-prize .entry-fee {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-}
-
-.race-details {
-    background: var(--bg-card);
-    padding: 16px;
-    border-radius: 10px;
-    margin-bottom: 16px;
-}
-
-.race-details p {
-    margin: 4px 0;
-    font-size: 0.9rem;
-}
-
-#race-horse-select {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.betting-section {
-    background: var(--bg-card);
-    padding: 16px;
-    border-radius: 10px;
-    margin-bottom: 16px;
-}
-
-.betting-section h4 { margin-bottom: 10px; color: var(--gold); }
-
-.bet-controls {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.bet-controls label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-}
-
-.bet-controls select, .bet-controls input {
-    padding: 6px 10px;
-    background: var(--bg-dark);
-    color: var(--text);
-    border: 1px solid var(--text-dim);
-    border-radius: 4px;
-}
-
-.bet-controls input { width: 100px; }
+.race-entry.locked { opacity: 0.5; cursor: not-allowed; }
+.race-entry .race-info h4 { color: var(--gold); margin-bottom: 3px; font-size: 0.95rem; }
+.race-entry .race-info p { font-size: 0.8rem; color: var(--text-dim); }
+.race-entry .race-prize { text-align: right; }
+.race-entry .race-prize .prize-amount { font-size: 1.1rem; font-weight: bold; color: var(--green); }
+.race-entry .race-prize .entry-fee { font-size: 0.75rem; color: var(--text-dim); }
+.race-details { background: var(--bg-card); padding: 14px; border-radius: 10px; margin-bottom: 14px; }
+.race-details p { margin: 3px 0; font-size: 0.85rem; }
+#race-horse-select { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.betting-section { background: var(--bg-card); padding: 14px; border-radius: 10px; margin-bottom: 14px; }
+.betting-section h4 { margin-bottom: 8px; color: var(--gold); font-size: 0.95rem; }
+.bet-controls { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.bet-controls label { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+.bet-controls select, .bet-controls input { padding: 5px 8px; background: var(--bg-dark); color: var(--text); border: 1px solid var(--text-dim); border-radius: 4px; }
+.bet-controls input { width: 90px; }
 .odds { font-weight: bold; color: var(--gold); }
-
-.btn-race {
-    padding: 14px 40px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    letter-spacing: 2px;
-    transition: all 0.2s;
-}
-.btn-race:hover { background: var(--accent-glow); transform: scale(1.02); }
-.btn-race:disabled { background: #555; cursor: not-allowed; transform: none; }
-
-.btn-back {
-    padding: 10px 24px;
-    background: transparent;
-    color: var(--text-dim);
-    border: 1px solid var(--text-dim);
-    border-radius: 6px;
-    cursor: pointer;
-    margin-left: 10px;
-}
+.btn-race { padding: 12px 36px; font-size: 1.1rem; font-weight: bold; background: var(--accent); color: #fff; border: none; border-radius: 8px; cursor: pointer; letter-spacing: 2px; }
+.btn-race:hover { background: var(--accent-glow); }
+.btn-race:disabled { background: #555; cursor: not-allowed; }
+.btn-back { padding: 8px 20px; background: transparent; color: var(--text-dim); border: 1px solid var(--text-dim); border-radius: 6px; cursor: pointer; margin-left: 8px; }
 .btn-back:hover { color: var(--text); border-color: var(--text); }
 
-/* === Racetrack Screen === */
-#screen-race {
-    padding: 10px 20px;
-    background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 20%, var(--grass) 20%, var(--grass) 100%);
-    min-height: 100vh;
-}
-
-.race-hud {
-    display: flex;
-    justify-content: space-between;
-    background: rgba(0,0,0,0.7);
-    padding: 10px 20px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
-
-.race-name { font-size: 1.3rem; font-weight: bold; color: var(--gold); }
-.race-distance { color: var(--text-dim); }
-
-.commentary {
-    background: rgba(0,0,0,0.8);
-    padding: 10px 16px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    color: var(--gold);
-    font-weight: 500;
-}
-
-#racetrack {
-    position: relative;
-    background: var(--track-brown);
-    border-radius: 10px;
-    padding: 10px 0;
-    border: 4px solid var(--rail);
-    overflow: hidden;
-}
-
-.track-markings {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-}
-
-.start-line {
-    position: absolute;
-    left: 60px;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: repeating-linear-gradient(180deg, #fff 0, #fff 8px, transparent 8px, transparent 16px);
-}
-
-.finish-line {
-    position: absolute;
-    right: 40px;
-    top: 0;
-    bottom: 0;
-    width: 12px;
-    background: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 0 0 / 6px 6px;
-}
-
-.race-lane {
-    display: flex;
-    align-items: center;
-    height: 48px;
-    padding: 0 50px 0 10px;
-    position: relative;
-    border-bottom: 1px dashed rgba(255,255,255,0.15);
-}
-
+/* === Racetrack === */
+#screen-race { padding: 10px 16px; background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 18%, var(--grass) 18%, var(--grass) 100%); min-height: 100vh; }
+.race-hud { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.75); padding: 8px 16px; border-radius: 8px; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+.race-name { font-size: 1.1rem; font-weight: bold; color: var(--gold); }
+.race-hud-right { display: flex; align-items: center; gap: 14px; }
+.race-distance { color: var(--text-dim); font-size: 0.9rem; }
+.race-stamina-hud { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-dim); }
+.race-stamina-bar { width: 80px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden; }
+.race-stamina-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #f1c40f, #2ecc71); border-radius: 4px; transition: width 0.2s; }
+.commentary { background: rgba(0,0,0,0.8); padding: 8px 14px; border-radius: 6px; margin-bottom: 8px; font-size: 0.9rem; min-height: 36px; display: flex; align-items: center; color: var(--gold); font-weight: 500; }
+#racetrack { position: relative; background: var(--track-brown); border-radius: 10px; padding: 8px 0; border: 3px solid var(--rail); overflow: hidden; }
+.start-line { position: absolute; left: 50px; top: 0; bottom: 0; width: 3px; background: repeating-linear-gradient(180deg, #fff 0, #fff 8px, transparent 8px, transparent 16px); }
+.finish-line { position: absolute; right: 30px; top: 0; bottom: 0; width: 10px; background: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 0 0 / 5px 5px; }
+.race-lane { display: flex; align-items: center; height: 42px; padding: 0 40px 0 8px; position: relative; border-bottom: 1px dashed rgba(255,255,255,0.12); }
 .race-lane:last-child { border-bottom: none; }
-
-.lane-number {
-    width: 24px;
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.5);
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.horse-sprite {
-    position: absolute;
-    left: 60px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    transition: left 0.1s linear;
-    z-index: 2;
-}
-
-.horse-body {
-    font-size: 1.8rem;
-    line-height: 1;
-    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5));
-}
-
-.horse-label {
-    font-size: 0.65rem;
-    background: rgba(0,0,0,0.7);
-    padding: 1px 5px;
-    border-radius: 3px;
-    white-space: nowrap;
-    color: #fff;
-}
-
-.position-board {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-}
-
-.pos-entry {
-    background: rgba(0,0,0,0.7);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.pos-number {
-    font-weight: bold;
-    width: 20px;
-}
-
+.race-lane.player-lane { background: rgba(255,215,0,0.06); }
+.lane-number { width: 20px; font-size: 0.7rem; color: rgba(255,255,255,0.4); text-align: center; flex-shrink: 0; }
+.horse-sprite { position: absolute; left: 50px; display: flex; align-items: center; gap: 3px; transition: left 0.08s linear; z-index: 2; }
+.horse-body { font-size: 1.6rem; line-height: 1; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
+.horse-label { font-size: 0.55rem; background: rgba(0,0,0,0.7); padding: 1px 4px; border-radius: 3px; white-space: nowrap; color: #fff; }
+.horse-label.player-label { background: rgba(255,215,0,0.8); color: #000; font-weight: bold; }
+.position-board { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.pos-entry { background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; }
+.pos-number { font-weight: bold; width: 18px; }
 .pos-entry.first .pos-number { color: var(--gold); }
 .pos-entry.second .pos-number { color: var(--silver); }
 .pos-entry.third .pos-number { color: var(--bronze); }
 
-/* === Results Screen === */
-#screen-results {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding-top: 40px;
-    background: linear-gradient(180deg, var(--bg-dark), var(--bg-mid));
-}
+/* === Race Controls === */
+.race-controls { display: flex; gap: 8px; margin-top: 10px; justify-content: center; flex-wrap: wrap; }
+.ctrl-btn { padding: 12px 18px; border: none; border-radius: 10px; font-weight: bold; font-size: 0.9rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 70px; transition: all 0.15s; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.ctrl-icon { font-size: 1.3rem; }
+.ctrl-hold { background: #2980b9; color: #fff; }
+.ctrl-hold:active, .ctrl-hold.active { background: #1a5276; transform: scale(0.95); }
+.ctrl-whip { background: #e74c3c; color: #fff; }
+.ctrl-whip:active { background: #922b21; transform: scale(0.95); }
+.ctrl-whip.cooldown { background: #555; cursor: not-allowed; }
+.ctrl-pos { background: #27ae60; color: #fff; }
+.ctrl-pos:active { background: #1e8449; transform: scale(0.95); }
+
+/* === Mini-Game === */
+#screen-minigame { background: var(--bg-dark); min-height: 100vh; display: none; flex-direction: column; }
+#screen-minigame.active { display: flex; }
+.minigame-hud { display: flex; justify-content: space-between; padding: 12px 16px; background: var(--bg-mid); }
+.mg-title { font-weight: bold; font-size: 1.1rem; color: var(--gold); }
+.mg-stat { color: var(--text-dim); }
+.mg-instructions { padding: 12px 16px; text-align: center; color: var(--text-dim); font-size: 0.9rem; }
+.mg-arena { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; }
+.mg-result { text-align: center; padding: 20px; }
+.mg-result h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.mg-result p { color: var(--text-dim); margin-bottom: 16px; }
+
+/* Sprint timing bar */
+.timing-bar { width: 90%; max-width: 500px; height: 50px; background: var(--bg-card); border-radius: 10px; position: relative; overflow: hidden; border: 2px solid var(--text-dim); }
+.timing-zone { position: absolute; height: 100%; background: rgba(46,204,113,0.3); border-left: 2px solid var(--green); border-right: 2px solid var(--green); }
+.timing-zone.perfect { background: rgba(255,215,0,0.3); border-color: var(--gold); }
+.timing-cursor { position: absolute; top: 0; width: 4px; height: 100%; background: var(--accent); transition: none; }
+.mg-tap-btn { padding: 20px 50px; font-size: 1.3rem; font-weight: bold; background: var(--accent); color: #fff; border: none; border-radius: 12px; cursor: pointer; margin-top: 20px; }
+.mg-tap-btn:active { transform: scale(0.95); }
+
+/* Endurance meter */
+.endurance-meter { width: 60px; height: 300px; background: var(--bg-card); border-radius: 10px; position: relative; overflow: hidden; border: 2px solid var(--text-dim); }
+.endurance-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(0deg, var(--green), var(--mood-neutral), var(--accent)); border-radius: 0 0 8px 8px; transition: height 0.05s; }
+.endurance-danger { position: absolute; top: 0; width: 100%; height: 15%; background: rgba(231,76,60,0.3); border-bottom: 2px dashed var(--accent); }
+.endurance-target { position: absolute; width: 100%; height: 3px; background: var(--gold); }
+
+/* Reaction gate */
+.gate-display { width: 200px; height: 200px; border-radius: 50%; background: var(--bg-card); border: 6px solid var(--text-dim); display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: all 0.1s; }
+.gate-display.ready { border-color: var(--accent); }
+.gate-display.go { border-color: var(--green); background: rgba(46,204,113,0.15); }
+.gate-display.early { border-color: var(--accent); background: rgba(231,76,60,0.15); }
+
+/* Agility targets */
+.agility-field { width: 300px; height: 300px; position: relative; background: var(--bg-card); border-radius: 10px; border: 2px solid var(--text-dim); }
+.agility-target { position: absolute; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.15s; }
+.agility-target.active { background: var(--gold); color: var(--bg-dark); transform: scale(1.1); }
+.agility-target.hit { background: var(--green); color: #fff; transform: scale(0.8); opacity: 0.5; }
+.agility-target.missed { background: var(--accent); color: #fff; }
+
+/* Guts mash */
+.guts-meter { width: 90%; max-width: 400px; height: 40px; background: var(--bg-card); border-radius: 10px; overflow: hidden; border: 2px solid var(--text-dim); }
+.guts-fill { height: 100%; background: linear-gradient(90deg, var(--mood-neutral), var(--accent)); border-radius: 8px; transition: width 0.05s; }
+.guts-timer { font-size: 2rem; font-weight: bold; color: var(--gold); margin-bottom: 16px; }
+.guts-count { font-size: 1.5rem; color: var(--text); margin-top: 10px; }
+
+/* === Results === */
+#screen-results { display: none; flex-direction: column; align-items: center; min-height: 100vh; padding-top: 30px; background: linear-gradient(180deg, var(--bg-dark), var(--bg-mid)); }
 #screen-results.active { display: flex; }
-
-#results-title {
-    font-size: 2rem;
-    color: var(--gold);
-    margin-bottom: 30px;
-}
-
-.podium {
-    display: flex;
-    align-items: flex-end;
-    gap: 10px;
-    margin-bottom: 30px;
-}
-
-.podium-place {
-    text-align: center;
-    padding: 12px 20px;
-    border-radius: 10px 10px 0 0;
-    min-width: 120px;
-}
-
-.podium-place.first {
-    background: linear-gradient(180deg, rgba(255,215,0,0.3), rgba(255,215,0,0.1));
-    border: 2px solid var(--gold);
-    border-bottom: none;
-    min-height: 160px;
-}
-.podium-place.second {
-    background: linear-gradient(180deg, rgba(192,192,192,0.3), rgba(192,192,192,0.1));
-    border: 2px solid var(--silver);
-    border-bottom: none;
-    min-height: 120px;
-}
-.podium-place.third {
-    background: linear-gradient(180deg, rgba(205,127,50,0.3), rgba(205,127,50,0.1));
-    border: 2px solid var(--bronze);
-    border-bottom: none;
-    min-height: 90px;
-}
-
-.podium-position { font-size: 1.8rem; font-weight: bold; }
+#results-title { font-size: 1.8rem; color: var(--gold); margin-bottom: 24px; }
+.podium { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 24px; }
+.podium-place { text-align: center; padding: 10px 16px; border-radius: 10px 10px 0 0; min-width: 100px; }
+.podium-place.first { background: linear-gradient(180deg, rgba(255,215,0,0.3), rgba(255,215,0,0.1)); border: 2px solid var(--gold); border-bottom: none; min-height: 140px; }
+.podium-place.second { background: linear-gradient(180deg, rgba(192,192,192,0.3), rgba(192,192,192,0.1)); border: 2px solid var(--silver); border-bottom: none; min-height: 100px; }
+.podium-place.third { background: linear-gradient(180deg, rgba(205,127,50,0.3), rgba(205,127,50,0.1)); border: 2px solid var(--bronze); border-bottom: none; min-height: 80px; }
+.podium-position { font-size: 1.6rem; font-weight: bold; }
 .podium-place.first .podium-position { color: var(--gold); }
 .podium-place.second .podium-position { color: var(--silver); }
 .podium-place.third .podium-position { color: var(--bronze); }
-
-.podium-horse { font-size: 0.95rem; margin-top: 4px; font-weight: bold; }
-.podium-owner { font-size: 0.75rem; color: var(--text-dim); }
-
-.results-table {
-    width: 100%;
-    max-width: 600px;
-    background: var(--bg-card);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.result-row {
-    display: flex;
-    padding: 10px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    align-items: center;
-}
-
+.podium-horse { font-size: 0.85rem; margin-top: 4px; font-weight: bold; }
+.podium-owner { font-size: 0.7rem; color: var(--text-dim); }
+.results-table { width: 100%; max-width: 550px; background: var(--bg-card); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+.result-row { display: flex; padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; font-size: 0.9rem; }
 .result-row:last-child { border-bottom: none; }
-.result-row .pos { width: 30px; font-weight: bold; }
+.result-row .pos { width: 28px; font-weight: bold; }
 .result-row.first .pos { color: var(--gold); }
 .result-row.second .pos { color: var(--silver); }
 .result-row.third .pos { color: var(--bronze); }
 .result-row .name { flex: 1; }
-.result-row .time { width: 70px; text-align: right; color: var(--text-dim); }
-
-.earnings {
-    font-size: 1.2rem;
-    margin: 16px 0;
-    padding: 12px 24px;
-    background: var(--bg-card);
-    border-radius: 8px;
-}
-
+.result-row .time { width: 60px; text-align: right; color: var(--text-dim); font-size: 0.8rem; }
+.earnings { font-size: 1.1rem; margin: 12px 0; padding: 10px 20px; background: var(--bg-card); border-radius: 8px; }
 .earnings.won { color: var(--green); border: 2px solid var(--green); }
 .earnings.lost { color: var(--accent); }
-
-.bet-result {
-    font-size: 1rem;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    border-radius: 8px;
-}
+.bet-result { font-size: 0.95rem; margin-bottom: 12px; padding: 8px 16px; border-radius: 8px; }
 .bet-result.won { color: var(--green); background: rgba(46,204,113,0.1); }
 .bet-result.lost { color: var(--accent); background: rgba(233,69,96,0.1); }
+.mood-change { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 12px; }
+.btn-continue { padding: 12px 40px; font-size: 1rem; font-weight: bold; background: var(--gold); color: var(--bg-dark); border: none; border-radius: 8px; cursor: pointer; letter-spacing: 2px; }
+.btn-continue:hover { transform: scale(1.03); }
 
-.btn-continue {
-    padding: 14px 50px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    background: var(--gold);
-    color: var(--bg-dark);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    letter-spacing: 2px;
-    transition: all 0.2s;
-}
-.btn-continue:hover { transform: scale(1.05); }
-
-/* === Setup Screen === */
-#screen-setup {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding-top: 60px;
-}
+/* === Setup === */
+#screen-setup { display: none; flex-direction: column; align-items: center; min-height: 100vh; padding-top: 50px; }
 #screen-setup.active { display: flex; }
-#screen-setup h2 { color: var(--gold); font-size: 2rem; margin-bottom: 30px; }
-
-.setup-form {
-    width: 100%;
-    max-width: 700px;
-}
-
-.setup-form label {
-    display: block;
-    margin-bottom: 16px;
-    font-size: 1rem;
-}
-
-.setup-form input[type="text"] {
-    display: block;
-    width: 100%;
-    margin-top: 6px;
-    padding: 10px 14px;
-    font-size: 1rem;
-    background: var(--bg-card);
-    border: 2px solid var(--text-dim);
-    color: var(--text);
-    border-radius: 6px;
-}
-.setup-form input[type="text"]:focus {
-    outline: none;
-    border-color: var(--gold);
-}
-
-.setup-form h3 {
-    margin: 24px 0 12px;
-    color: var(--text);
-}
-
-#btn-confirm-setup {
-    margin-top: 24px;
-    width: 100%;
-    padding: 14px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    background: var(--gold);
-    color: var(--bg-dark);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    letter-spacing: 2px;
-}
+#screen-setup h2 { color: var(--gold); font-size: 1.8rem; margin-bottom: 24px; }
+.setup-form { width: 100%; max-width: 650px; }
+.setup-form label { display: block; margin-bottom: 14px; font-size: 0.95rem; }
+.setup-form input[type="text"] { display: block; width: 100%; margin-top: 4px; padding: 8px 12px; font-size: 1rem; background: var(--bg-card); border: 2px solid var(--text-dim); color: var(--text); border-radius: 6px; }
+.setup-form input[type="text"]:focus { outline: none; border-color: var(--gold); }
+.setup-form h3 { margin: 20px 0 10px; color: var(--text); }
+#btn-confirm-setup { margin-top: 20px; width: 100%; padding: 12px; font-size: 1.1rem; font-weight: bold; background: var(--gold); color: var(--bg-dark); border: none; border-radius: 8px; cursor: pointer; letter-spacing: 2px; }
 #btn-confirm-setup:disabled { background: #555; color: #888; cursor: not-allowed; }
-#btn-confirm-setup:not(:disabled):hover { transform: scale(1.02); }
-
-/* === Empty State === */
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    color: var(--text-dim);
-    font-size: 1.1rem;
-}
-
-/* === Notification === */
-.notification {
-    position: fixed;
-    bottom: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--bg-card);
-    color: var(--text);
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: bottom 0.3s ease;
-    z-index: 100;
-    border: 1px solid var(--text-dim);
-    white-space: nowrap;
-}
-
-.notification.show { bottom: 30px; }
-.notification.success { border-color: var(--green); }
-.notification.error { border-color: var(--accent); }
 
 /* === Records === */
-.records-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.record-entry {
-    background: var(--bg-card);
-    padding: 12px 16px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
+.records-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
+.rec-tab { padding: 6px 14px; background: var(--bg-card); border: none; color: var(--text-dim); cursor: pointer; border-radius: 6px; font-size: 0.85rem; }
+.rec-tab.active { background: var(--accent); color: #fff; }
+.records-section { display: none; }
+.records-section.active { display: block; }
+.records-list { display: flex; flex-direction: column; gap: 6px; }
+.record-entry { background: var(--bg-card); padding: 10px 14px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
 .record-entry .record-info { flex: 1; }
-.record-entry .record-info h4 { color: var(--text); font-size: 0.95rem; }
-.record-entry .record-info p { font-size: 0.8rem; color: var(--text-dim); }
-.record-result { font-weight: bold; font-size: 1.1rem; }
+.record-entry .record-info h4 { color: var(--text); font-size: 0.9rem; }
+.record-entry .record-info p { font-size: 0.75rem; color: var(--text-dim); }
+.record-result { font-weight: bold; font-size: 1rem; }
 .record-result.win { color: var(--gold); }
 .record-result.place { color: var(--silver); }
 .record-result.loss { color: var(--text-dim); }
 
+/* Bloodline tree */
+.bloodline-entry { background: var(--bg-card); padding: 12px; border-radius: 8px; margin-bottom: 8px; }
+.bloodline-entry h4 { color: var(--gold); font-size: 0.95rem; }
+.bloodline-entry .parents { font-size: 0.8rem; color: var(--text-dim); margin-top: 4px; }
+.bloodline-entry .gen-badge { font-size: 0.65rem; padding: 1px 6px; background: var(--accent); color: #fff; border-radius: 3px; margin-left: 6px; }
+
+/* Achievements */
+.achievement { display: flex; align-items: center; gap: 12px; background: var(--bg-card); padding: 10px 14px; border-radius: 8px; margin-bottom: 6px; }
+.achievement.locked { opacity: 0.4; }
+.achievement .ach-icon { font-size: 1.5rem; }
+.achievement .ach-info h4 { font-size: 0.9rem; }
+.achievement .ach-info p { font-size: 0.7rem; color: var(--text-dim); }
+
+/* === Modal === */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-content { background: var(--bg-mid); border-radius: 12px; padding: 20px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
+.modal-close { position: absolute; top: 10px; right: 14px; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+/* === Empty / Notification === */
+.empty-state { text-align: center; padding: 30px; color: var(--text-dim); font-size: 1rem; }
+.notification { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: var(--bg-card); color: var(--text); padding: 10px 20px; border-radius: 8px; font-weight: 500; transition: bottom 0.3s ease; z-index: 100; border: 1px solid var(--text-dim); white-space: nowrap; font-size: 0.9rem; max-width: 90vw; overflow: hidden; text-overflow: ellipsis; }
+.notification.show { bottom: 24px; }
+.notification.success { border-color: var(--green); }
+.notification.error { border-color: var(--accent); }
+
 /* === Responsive === */
 @media (max-width: 768px) {
     .title-banner h1 { font-size: 2rem; letter-spacing: 2px; }
-    .tab-bar { overflow-x: auto; }
-    .tab { padding: 8px 14px; font-size: 0.85rem; white-space: nowrap; }
+    .title-logo { font-size: 3.5rem; }
+    .tab { padding: 6px 10px; font-size: 0.75rem; }
     .horse-grid { grid-template-columns: 1fr; }
-    .training-programs { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-    .hud { flex-direction: column; gap: 8px; text-align: center; }
+    .training-programs, .food-grid, .activity-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+    .hud { flex-direction: column; gap: 4px; text-align: center; }
     .podium { flex-direction: column; align-items: center; }
-    .podium-place { min-height: auto !important; border-radius: 10px !important; border: 2px solid; min-width: 200px; }
+    .podium-place { min-height: auto !important; border-radius: 10px !important; border: 2px solid; min-width: 180px; }
+    .breed-panels { grid-template-columns: 1fr; }
+    .pair-display { flex-direction: column; }
+    .ctrl-btn { padding: 10px 14px; font-size: 0.8rem; min-width: 60px; }
+    .race-lane { height: 36px; }
+    .horse-body { font-size: 1.3rem; }
+    .agility-field { width: 250px; height: 250px; }
 }
